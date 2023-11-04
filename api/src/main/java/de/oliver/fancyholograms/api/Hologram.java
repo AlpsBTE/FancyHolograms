@@ -152,6 +152,8 @@ public abstract class Hologram {
      * @return true if the hologram was successfully shown to the player, false otherwise
      */
     public final boolean showHologram(@NotNull final Player player) {
+        if (data.hasGlobalVisibility() && !data.getIndividualVisibility().contains(player.getUniqueId().toString())) return false;
+
         if (!new HologramShowEvent(this, player).callEvent()) {
             return false;
         }

@@ -4,6 +4,7 @@ import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Display.Billboard;
 import org.bukkit.entity.Display.Brightness;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,6 +29,8 @@ public final class HologramData {
     public static final boolean DEFAULT_TEXT_SHADOW_STATE = false;
     public static final int DEFAULT_TEXT_UPDATE_INTERVAL = -1;
     public static final int DEFAULT_VISIBILITY_DISTANCE = 20;
+    public static final boolean DEFAULT_HAS_GLOBAL_VISIBILITY = true;
+    public static final List<String> DEFAULT_INDIVIDUAL_VISIBILITY = new ArrayList<>();
 
 
     @NotNull
@@ -52,6 +55,8 @@ public final class HologramData {
     private boolean textHasShadow = DEFAULT_TEXT_SHADOW_STATE;
     private int textUpdateInterval = DEFAULT_TEXT_UPDATE_INTERVAL;
     private int visibilityDistance = DEFAULT_VISIBILITY_DISTANCE;
+    private boolean hasGlobalVisibility = DEFAULT_HAS_GLOBAL_VISIBILITY;
+    private List<String> individualVisibility = DEFAULT_INDIVIDUAL_VISIBILITY;
 
 
     @Nullable
@@ -90,6 +95,8 @@ public final class HologramData {
         this.textUpdateInterval = other.getTextUpdateInterval();
         this.linkedNpcName = other.getLinkedNpcName();
         this.visibilityDistance = other.getVisibilityDistance();
+        this.hasGlobalVisibility = other.hasGlobalVisibility();
+        this.individualVisibility = other.getIndividualVisibility();
     }
 
 
@@ -370,6 +377,29 @@ public final class HologramData {
         this.linkedNpcName = linkedNpcName;
     }
 
+    public boolean hasGlobalVisibility() {
+        return hasGlobalVisibility;
+    }
+
+    public void setGlobalVisibility(boolean isVisible) {
+        this.hasGlobalVisibility = isVisible;
+    }
+
+    public List<String> getIndividualVisibility() {
+        return individualVisibility;
+    }
+
+    public void setIndividualVisibility(String playerUUID) {
+        if (!this.individualVisibility.contains(playerUUID)) this.individualVisibility.add(playerUUID);
+    }
+
+    public void removeIndividualVisibility(String playerUUID) {
+        this.individualVisibility.remove(playerUUID);
+    }
+
+    public void clearIndividualVisibility() {
+        this.individualVisibility = DEFAULT_INDIVIDUAL_VISIBILITY;
+    }
 
     /**
      * Returns a copy of this HologramData.

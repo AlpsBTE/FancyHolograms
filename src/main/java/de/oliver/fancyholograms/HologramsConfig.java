@@ -73,6 +73,8 @@ public class HologramsConfig {
         final var background = config.getString("background");
         final var billboard = config.getString("billboard", HologramData.DEFAULT_BILLBOARD.name());
         final var textAlignment = config.getString("text_alignment", HologramData.DEFAULT_TEXT_ALIGNMENT.name());
+        final var hasGlobalVisibility = config.getBoolean("has_global_visibility", HologramData.DEFAULT_HAS_GLOBAL_VISIBILITY);
+        final var individualVisibility = config.getList("individual_visibility", HologramData.DEFAULT_INDIVIDUAL_VISIBILITY);
 
         final var data = new HologramData(name);
 
@@ -111,6 +113,11 @@ public class HologramsConfig {
             case "left" -> TextDisplay.TextAlignment.LEFT;
             default -> TextDisplay.TextAlignment.CENTER;
         });
+
+        data.setGlobalVisibility(hasGlobalVisibility);
+        for (Object uuid : individualVisibility) {
+            if (uuid instanceof String) data.setIndividualVisibility((String) uuid);
+        }
 
         data.setLinkedNpcName(config.getString("linkedNpc"));
 
@@ -184,6 +191,9 @@ public class HologramsConfig {
         }
 
         config.set("background", color);
+
+        config.set("has_global_visibility", data.hasGlobalVisibility());
+        config.set("individual_visibility", data.getIndividualVisibility());
 
         config.set("linkedNpc", data.getLinkedNpcName());
     }
